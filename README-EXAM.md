@@ -368,3 +368,96 @@ Frontend
 
 ---
 
+# 🔐 Environment Variables
+
+Database configuration was externalized instead of hard-coding the values in `docker-compose.yml`.
+
+## Backend Variables
+
+```text
+DB_HOST
+DB_NAME
+DB_PASSWORD
+DB_PORT
+DB_USER
+```
+
+## PostgreSQL Variables
+
+```text
+POSTGRES_DB
+POSTGRES_PASSWORD
+POSTGRES_USER
+```
+
+The `.env` file is excluded from Git.
+
+### Verify `.env` is Ignored
+
+```bash
+git check-ignore -v .env
+```
+
+The output confirmed:
+
+```text
+.gitignore:3:.env .env
+```
+
+### Verify `.env` Is Not Tracked
+
+```bash
+git ls-files .env
+```
+
+No output confirmed that `.env` is not tracked by Git.
+
+
+> ⚠️ Never commit real passwords, credentials, or other secrets to Git.
+
+---
+
+# 🌐 Docker Networking
+
+A custom Docker bridge network was created through Docker Compose:
+
+```text
+jerney-network
+```
+
+The network was inspected using:
+
+```bash
+docker network inspect jerney_jerney-network
+```
+
+The inspection verified that these containers were connected:
+
+```text
+jerney-frontend-1
+jerney-backend-1
+jerney-db-1
+```
+
+### Docker DNS / Service Discovery
+
+Backend → Database:
+
+```bash
+docker exec jerney-backend-1 getent hosts db
+```
+
+The service resolved to the PostgreSQL container.
+
+Frontend → Backend:
+
+```bash
+docker exec jerney-frontend-1 getent hosts backend
+```
+
+The service resolved to the backend container.
+
+This demonstrates Docker's internal DNS-based service discovery.
+
+---
+

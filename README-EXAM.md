@@ -602,3 +602,110 @@ jerney-db-1          5432/tcp
 ---
 
 
+
+# ☁️ AWS EC2 Deployment
+
+The project was deployed on an Ubuntu EC2 instance.
+
+The application was run using Docker Compose.
+
+### Start the Application
+
+```bash
+docker compose up -d
+```
+
+### Check the Running Stack
+
+```bash
+docker compose ps
+```
+
+### Validate Compose Configuration
+
+```bash
+docker compose config
+```
+
+### Build the Backend
+
+```bash
+docker compose build backend
+```
+
+### Build the Complete Stack
+
+```bash
+docker compose build
+```
+
+---
+
+# 🚀 Running the Project
+
+## Clone Repository
+
+```bash
+git clone git@github.com:zebatajmirji786/Jerney.git
+cd Jerney
+```
+
+## Switch to Practical Exam Branch
+
+```bash
+git checkout practical-exam
+```
+
+## Configure Environment
+
+Create the local `.env` file containing the required database variables.
+
+```text
+DB_USER=...
+DB_PASSWORD=...
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=...
+
+POSTGRES_DB=...
+POSTGRES_USER=...
+POSTGRES_PASSWORD=...
+```
+
+> Do not commit the `.env` file.
+
+## Validate Compose
+
+```bash
+docker compose config
+```
+
+## Build
+
+```bash
+docker compose build
+```
+
+## Start
+
+```bash
+docker compose up -d
+```
+
+## Check Status
+
+```bash
+docker compose ps
+```
+
+## Stop
+
+```bash
+docker compose down
+```
+
+Use `docker compose down` when stopping the stack while keeping the PostgreSQL named volume.
+
+---
+
+

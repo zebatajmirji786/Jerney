@@ -816,17 +816,6 @@ practical-exam
 git log --oneline
 ```
 
-Important commits:
-
-```text
-f3051ff  refactor: externalize compose environment
-f7fc5f9  add healthchecks and service dependencies
-b2ca52f  feat: add docker compose
-745e8d3  feat: containerize frontend
-a463a58  feat: containerize backend
-6904271  feat: initial Jerney blog platform
-```
-
 The practical-exam branch was pushed to GitHub:
 
 ```text
@@ -859,3 +848,49 @@ nothing to commit, working tree clean
 
 ---
 
+# 🎓 What This Project Demonstrates
+
+This practical implementation demonstrates hands-on understanding of:
+
+1. **Docker containerization** — packaging frontend, backend, and database services.
+2. **Docker Compose** — orchestrating multiple containers as one application.
+3. **Docker networking** — allowing services to communicate using Compose service names.
+4. **Docker volumes** — persisting PostgreSQL data outside the container lifecycle.
+5. **Docker healthchecks** — verifying database readiness.
+6. **Service dependencies** — controlling application startup order.
+7. **Docker image optimization** — Alpine images, multi-stage builds, `.dockerignore`, production dependencies, and layer caching.
+8. **Container security** — running the backend as a non-root user.
+9. **Nginx reverse proxy** — serving the frontend and forwarding API requests.
+10. **Environment configuration** — keeping database configuration outside the committed source code.
+11. **AWS EC2 deployment** — running the containerized application on a cloud VM.
+12. **Security Groups** — exposing only the required public port and restricting SSH access.
+13. **Git version control** — maintaining the practical work on a dedicated branch and pushing it to GitHub.
+
+---
+
+## 📌 Final Notes
+
+The `practical-exam` branch contains the Dockerized and deployed version of the Jerney project.
+
+The project uses:
+
+```text
+React + Vite
+      ↓
+Nginx
+      ↓
+Node.js + Express
+      ↓
+PostgreSQL 16
+```
+
+with:
+
+```text
+Docker Compose
+Docker Bridge Network
+Docker Named Volume
+AWS EC2
+```
+
+> This README-EXAM documents the features and infrastructure that were actually implemented and verified during the practical examination

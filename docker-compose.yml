@@ -13,11 +13,11 @@ services:
   backend:
     build: ./backend
     environment:
-      DB_USER: postgres_user
-      DB_PASSWORD: postgres_password
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: postgres
+      DB_USER: $(DB_USER)
+      DB_PASSWORD: $(DB_PASSWORD)
+      DB_HOST: $(DB_HOST)
+      DB_PORT: $(DB_PORT)
+      DB_NAME: $(DB_NAME)
     restart: always
     networks:
       - jerney-network
@@ -30,9 +30,9 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres_user
-      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: $(POSTGRES_DB)
+      POSTGRES_USER: $(POSTGRES_USER)
+      POSTGRES_PASSWORD: $(POSTGRES_PASSWORD)
     restart: always
     volumes:
       - postgres-data:/var/lib/postgresql/data

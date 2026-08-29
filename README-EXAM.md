@@ -627,12 +627,6 @@ docker compose ps
 docker compose config
 ```
 
-### Build the Backend
-
-```bash
-docker compose build backend
-```
-
 ### Build the Complete Stack
 
 ```bash
@@ -708,4 +702,160 @@ Use `docker compose down` when stopping the stack while keeping the PostgreSQL n
 
 ---
 
+# 🛠️ Useful Docker Commands
+
+| Command | Purpose |
+|---|---|
+| `docker compose config` | Validate Docker Compose configuration |
+| `docker compose build` | Build all services |
+| `docker compose build backend` | Build only the backend |
+| `docker compose up -d` | Start the stack in detached mode |
+| `docker compose down` | Stop and remove containers and network |
+| `docker compose ps` | Show Compose service status |
+| `docker compose logs` | View service logs |
+| `docker ps` | List running containers |
+| `docker images` | List local images |
+| `docker images \| grep jerney` | Filter Jerney images |
+| `docker history <image>` | Show image layer history |
+| `docker image inspect <image>` | Inspect image metadata |
+| `docker volume ls` | List Docker volumes |
+| `docker volume inspect <volume>` | Inspect a Docker volume |
+| `docker network inspect <network>` | Inspect a Docker network |
+| `docker inspect <container>` | Inspect container configuration |
+| `docker exec <container> <command>` | Run a command inside a container |
+| `docker exec <container> whoami` | Check the container user |
+| `docker exec <container> id` | Check UID/GID and groups |
+| `getent hosts <service>` | Test Docker service DNS resolution |
+
+---
+
+# 🧪 Troubleshooting
+
+## Check Container Status
+
+```bash
+docker compose ps
+```
+
+## View Backend Logs
+
+```bash
+docker compose logs backend
+```
+
+## View Frontend Logs
+
+```bash
+docker compose logs frontend
+```
+
+## View Database Logs
+
+```bash
+docker compose logs db
+```
+
+## Validate Compose
+
+```bash
+docker compose config
+```
+
+## Inspect Network
+
+```bash
+docker network inspect jerney_jerney-network
+```
+
+## Inspect Database Volume
+
+```bash
+docker volume inspect jerney_postgres-data
+```
+
+## Check Database Tables
+
+```bash
+docker exec jerney-db-1 psql -U postgres_user -d postgres -c "\dt"
+```
+
+## Test Backend Health
+
+```bash
+docker exec jerney-backend-1 node -e "require('http').get('http://localhost:5000/api/health', r => { console.log(r.statusCode); process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
+```
+
+---
+
+# 🔀 Git & Version Control
+
+The practical examination work was developed on the `practical-exam` branch.
+
+### Branches
+
+```bash
+git branch
+```
+
+Branches:
+
+```text
+main
+practical-exam
+```
+
+The active branch for the practical examination is:
+
+```text
+practical-exam
+```
+
+### Commit History
+
+```bash
+git log --oneline
+```
+
+Important commits:
+
+```text
+f3051ff  refactor: externalize compose environment
+f7fc5f9  add healthchecks and service dependencies
+b2ca52f  feat: add docker compose
+745e8d3  feat: containerize frontend
+a463a58  feat: containerize backend
+6904271  feat: initial Jerney blog platform
+```
+
+The practical-exam branch was pushed to GitHub:
+
+```text
+origin/practical-exam
+```
+
+### Verify Remote
+
+```bash
+git remote -v
+```
+
+Remote repository:
+
+```text
+git@github.com:zebatajmirji786/Jerney.git
+```
+
+### Check Working Tree
+
+```bash
+git status
+```
+
+A clean working tree should show:
+
+```text
+nothing to commit, working tree clean
+```
+
+---
 

@@ -439,25 +439,61 @@ jerney-backend-1
 jerney-db-1
 ```
 
-### Docker DNS / Service Discovery
 
-Backend → Database:
+---
 
-```bash
-docker exec jerney-backend-1 getent hosts db
+# 💾 PostgreSQL Persistent Storage
+
+PostgreSQL uses a Docker named volume:
+
+```text
+jerney_postgres-data
 ```
 
-The service resolved to the PostgreSQL container.
+The volume is mounted inside the database container at:
 
-Frontend → Backend:
-
-```bash
-docker exec jerney-frontend-1 getent hosts backend
+```text
+/var/lib/postgresql/data
 ```
 
-The service resolved to the backend container.
+### Storage Flow
 
-This demonstrates Docker's internal DNS-based service discovery.
+```text
+PostgreSQL
+     │
+     ▼
+/var/lib/postgresql/data
+     │
+     ▼
+jerney_postgres-data
+```
+
+The volume was verified using:
+
+```bash
+docker inspect jerney-db-1
+```
+
+The mount showed:
+
+```text
+Name: jerney_postgres-data
+Destination: /var/lib/postgresql/data
+```
+
+The volume was also listed using:
+
+```bash
+docker volume ls | grep jerney
+```
+
+Output:
+
+```text
+local     jerney_postgres-data
+```
+
+> ⚠️ `docker compose down -v` should not be used when the PostgreSQL data needs to be preserved because it removes the named volume.
 
 ---
 

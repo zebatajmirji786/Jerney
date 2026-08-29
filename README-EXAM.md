@@ -155,4 +155,125 @@ Start Node.js application
 
 ---
 
+## 2. Frontend Container
+
+The frontend uses a **multi-stage Docker build**.
+
+### Build Stage
+
+```text
+node:20-alpine
+      ↓
+Install dependencies
+      ↓
+npm run build
+      ↓
+dist/
+```
+
+### Runtime Stage
+
+```text
+nginx:1.27-alpine
+      ↓
+Copy generated dist/
+      ↓
+Nginx serves frontend
+```
+
+The Node.js build environment is not included in the final runtime image.
+
+### Benefits
+
+- Smaller runtime image
+- Separate build and runtime environments
+- Nginx serves the production frontend
+- Node.js build dependencies are excluded from the final runtime image
+
+---
  
+# 📦 Docker `.dockerignore`
+
+## Backend
+
+The backend `.dockerignore` excludes unnecessary files from the Docker build context:
+
+```text
+node_modules
+npm-debug.log
+.git
+.env
+*.log
+```
+
+## Frontend
+
+The frontend `.dockerignore` excludes:
+
+```text
+node_modules
+dist
+.git
+.env
+*.log
+```
+
+This reduces unnecessary files being sent to the Docker build process.
+
+---
+
+# ⚡ Docker Layer Caching
+
+The backend Dockerfile was deliberately ordered so that dependency-related layers can be reused.
+
+```text
+WORKDIR
+   ↓
+COPY package*.json
+   ↓
+npm install --omit=dev
+   ↓
+COPY application source
+```
+
+When the application source changes but `package.json` remains unchanged, Docker can reuse the dependency installation layer.
+
+### Verified Build Cache
+
+Repeated builds showed:
+
+```text
+CACHED [2/5] WORKDIR /app
+CACHED [3/5] COPY package*.json ./
+CACHED [4/5] RUN npm install --omit=dev
+CACHED [5/5] COPY . .
+```
+
+This confirmed that Docker layer caching was working.
+
+---
+
+# 📊 Docker Image Size
+
+Image sizes were checked using:
+
+```bash
+docker image inspect jerney-backend --format='{{.Size}}'
+docker image inspect jerney-frontend --format='{{.Size}}'
+```
+
+Measured sizes:
+
+| Image | Approximate Size |
+|---|---:|
+| `jerney-backend` | 52.1 MB |
+| `jerney-frontend` | 21.1 MB |
+
+The image list was also checked with:
+
+```bash
+docker images | grep jerney
+```
+
+---
+

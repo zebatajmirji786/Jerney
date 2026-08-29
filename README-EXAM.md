@@ -277,3 +277,94 @@ docker images | grep jerney
 
 ---
 
+# 🐙 Docker Compose
+
+Docker Compose is used to manage the complete application stack.
+
+The Compose stack contains three services:
+
+```text
+frontend
+backend
+db
+```
+
+All three services are connected to:
+
+```text
+jerney-network
+```
+
+### Compose Architecture
+
+```text
+                 jerney-network
+                       │
+       ┌───────────────┼───────────────┐
+       │               │               │
+       ▼               ▼               ▼
+   frontend         backend            db
+   Nginx:80      Node.js:5000     PostgreSQL:5432
+       │               │               │
+       └─────── API ───┘               │
+                       │               │
+                       └──── DB ───────┘
+```
+
+---
+
+# ❤️ PostgreSQL Healthcheck
+
+The PostgreSQL service uses a healthcheck based on `pg_isready`.
+
+```yaml
+healthcheck:
+  test:
+    - CMD
+    - /usr/bin/pg_isready
+    - -U
+    - postgres_user
+    - -d
+    - postgres
+  timeout: 5s
+  interval: 5s
+  retries: 5
+  start_period: 10s
+```
+
+The database was verified as:
+
+```text
+Up (healthy)
+```
+
+### Service Dependencies
+
+The backend waits for PostgreSQL to become healthy:
+
+```yaml
+depends_on:
+  db:
+    condition: service_healthy
+```
+
+The frontend depends on the backend service:
+
+```yaml
+depends_on:
+  backend:
+    condition: service_started
+```
+
+Therefore:
+
+```text
+PostgreSQL
+     ↓
+Backend
+     ↓
+Frontend
+```
+
+---
+

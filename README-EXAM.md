@@ -497,3 +497,108 @@ local     jerney_postgres-data
 
 ---
 
+
+# 🗄️ Database Verification
+
+PostgreSQL was accessed from inside the database container.
+
+### Check Tables
+
+```bash
+docker exec jerney-db-1 psql -U postgres_user -d postgres -c "\dt"
+```
+
+Verified tables:
+
+```text
+comments
+posts
+```
+
+### Check Number of Posts
+
+```bash
+docker exec jerney-db-1 psql -U postgres_user -d postgres -c "SELECT COUNT(*) FROM posts;"
+```
+
+Verified:
+
+```text
+count
+-------
+     1
+```
+
+---
+
+# 🔎 Application Verification
+
+## 1. Check Compose Services
+
+```bash
+docker compose ps
+```
+
+Verified:
+
+```text
+jerney-backend-1    Up
+jerney-db-1         Up (healthy)
+jerney-frontend-1   Up
+```
+
+## 2. Backend Healthcheck Endpoint
+
+The backend exposes:
+
+```text
+GET /api/health
+```
+
+The endpoint was tested from inside the backend container and returned:
+
+```text
+HTTP 200
+```
+
+## 3. Frontend → Backend
+
+The frontend container was used to access the backend through the Docker network:
+
+```bash
+docker exec jerney-frontend-1 wget -qO- http://backend:5000/api/health
+```
+
+The backend returned a successful health response.
+
+## 4. Backend → PostgreSQL
+
+Connectivity from the backend container to PostgreSQL was tested through:
+
+```text
+db:5432
+```
+
+Result:
+
+```text
+PostgreSQL connection: OK
+```
+
+## 5. Container Port Mapping
+
+```bash
+docker ps --format "table {{.Names}}\t{{.Ports}}"
+```
+
+Verified:
+
+```text
+jerney-frontend-1    0.0.0.0:80->80/tcp, [::]:80->80/tcp
+jerney-backend-1     5000/tcp
+jerney-db-1          5432/tcp
+```
+
+---
+
+
